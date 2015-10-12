@@ -1,0 +1,35 @@
+<% filters = [] %>
+<% filters << Spree::Core::ProductFilters.taxons_below(@taxon) %>
+<% filters << Spree::Core::ProductFilters.price_filter %>
+
+<% unless filters.empty? %>
+  <section class="block" id="layered_block_left">
+    <h4 class="title_block">Catalog</h4>
+    <div class="block_content">
+      <%= form_tag '', method: :get, id: 'layered_form' do %>
+        <%= hidden_field_tag 'per_page', params[:per_page] if params[:per_page] %>
+        <div>
+          <% filters.each_with_index do |filter, index| %>
+            <% labels = filter[:labels] || filter[:conds].map {|m,c| [m,m]} %>
+            <% next if labels.empty? %>
+            <div class="layered_filter">
+              <div class="layered_subtitle_heading">
+                <span class="layered_subtitle"><%= filter[:name] %></span>
+                <ul class="col-lg-12 layered_filter_ul" id="ul_layered_category_<%= index %>">
+                  <% labels.each do |nm,val| %>
+                    <% label = "#{filter[:name]}_#{nm}".gsub(/\s+/,'_') %>
+                    <li class="nomargin hiddable col-lg-12">
+                      <% flag = params[:search] && params[:search][filter[:scope]] && params[:search][filter[:scope]].include?(val.to_s) ? true : false %>
+                      <%= check_box_tag("search[#{filter[:scope].to_s}][]", val, flag, id: label) %>
+                      <label for="<%= label %>"><%= nm %></label>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+        <%= submit_tag Spree.t(:search), name: nil, class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </section>
+<% end %>
