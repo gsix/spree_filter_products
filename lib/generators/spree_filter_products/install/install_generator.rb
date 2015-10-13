@@ -1,6 +1,7 @@
 module SpreeFilterProducts
   module Generators
     class InstallGenerator < Rails::Generators::Base
+      source_root File.expand_path("../templates", __FILE__)
 
       class_option :auto_run_migrations, type: :boolean, default: false
 
@@ -15,6 +16,10 @@ module SpreeFilterProducts
         else
           puts 'Skipping rake db:migrate, don\'t forget to run it!'
         end
+      end
+
+      def copy_initializer
+        copy_file 'spree_filter_init.rb', 'config/initializers/spree_filter_init.rb'
       end
     end
   end
