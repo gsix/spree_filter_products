@@ -5,6 +5,11 @@ module SpreeFilterProducts
 
       class_option :auto_run_migrations, type: :boolean, default: false
 
+      def add_javascripts
+        append_file 'vendor/assets/javascripts/spree/frontend/all.js', "\n//= require spree/frontend/spree_filter_products\n"
+        append_file 'vendor/assets/javascripts/spree/backend/all.js', "\n//= require spree/backend/spree_filter_products\n"
+      end
+
       def add_migrations
         run 'bundle exec rake railties:install:migrations FROM=spree_filter_products'
       end
