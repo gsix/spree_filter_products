@@ -1,6 +1,7 @@
 <% filters = [] %>
-<% filters << Spree::Core::ProductFilters.taxons_below(@taxon) %>
-<% filters << Spree::Core::ProductFilters.price_filter %>
+<% filters << Spree::Core::ProductFilters.taxons_below(@taxon) if Spree::Core::ProductFilters.respond_to?(:taxons_below) %>
+<% filters << Spree::Core::ProductFilters.price_filter if Spree::Core::ProductFilters.respond_to?(:price_filter) %>
+<% filters = filters +  Spree::Core::ProductFilters.taxons_options(@taxon) if Spree::Core::ProductFilters.respond_to?(:taxons_options) %>
 
 <% unless filters.empty? %>
   <section class="block" id="layered_block_left">
