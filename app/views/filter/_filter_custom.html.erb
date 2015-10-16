@@ -21,6 +21,7 @@
                     <% label = "#{filter[:name]}_#{nm}".gsub(/\s+/,'_') %>
                     <li class="nomargin hiddable col-lg-12">
                       <% flag = params[:search] && params[:search][filter[:scope]] && params[:search][filter[:scope]].include?(val.to_s) ? true : false %>
+                      <% flag = !params[:search].present? || params[:search].exclude?(:taxons_id_in_tree_any) ? true : flag if filter[:scope] == :taxons_id_in_tree_any %>
                       <%= check_box_tag("search[#{filter[:scope].to_s}][]", val, flag, id: label) %>
                       <label for="<%= label %>"><%= nm %></label>
                     </li>
